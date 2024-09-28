@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground, FlatList } from 'react-native';
 import { firestore } from '../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { collection, doc, updateDoc } from 'firebase/firestore';
 
 export default function Alterar({ route, navigation }) {
+
     const id = route.params.id;
+
     const [Animal, setAnimal] = useState(route.params.Animal);
     const [Habitat, setHabitat] = useState(route.params.Habitat);
 
-    async function alterar() {
+    async function alterar(id, Animal, Habitat) {
         try {
-            await updateDoc(doc(firestore, 'bdanimal', id), {
+            await updateDoc(doc(collection(firestore, "bdanimal"),id),   {
                 Animal: Animal,
                 Habitat: Habitat
-            });
+            })
             Alert.alert("Sucesso", "Animal alterado com sucesso!");
             navigation.navigate('Home');
         } catch (error) {
@@ -39,12 +41,21 @@ export default function Alterar({ route, navigation }) {
                     autoCapitalize='words'
                     style={styles.input}
                     placeholder="Digite o Habitat do animal"
-                    onChangeText={setHabitat} // Corrigido aqui
-                    value={Habitat} // Corrigido aqui
+                    onChangeText={setHabitat}
+                    value={Habitat}
                 />
-                <TouchableOpacity style={styles.button} onPress={alterar}>
+                <TouchableOpacity style={styles.button} onPress={() => alterar(id, Animal, Habitat)}>
                     <Text style={styles.textButton}>Alterar</Text>
                 </TouchableOpacity>
+                <FlatList
+                    data={[]} // Ensure this is an array
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
+                            <Text>{item.name}</Text>
+                        </View>
+                    )}
+                />
             </View>
         </ImageBackground>
     );
@@ -85,5 +96,10 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: "cover",
         justifyContent: "center"
+    },
+    itemContainer: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
 });

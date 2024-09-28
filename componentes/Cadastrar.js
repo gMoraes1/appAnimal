@@ -4,14 +4,14 @@ import { firestore } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function Cadastrar({ navigation }) {
-    const [Animal, setAnimal] = useState('');
-    const [Habitat, setHabitat] = useState('');
+    const [Animal, setAnimal] = useState(null);
+    const [Habitat, setHabitat] = useState(null);
 
     async function Cadastrar() {
         try {
             const docRef = await addDoc(collection(firestore, 'bdanimal'), {
-                Animal,
-                Habitat
+                Animal: Animal,
+                Habitat: Habitat
             });
             console.log("Cadastro relizado com sucesso: ", docRef.id);
             Alert.alert("Sucesso", "Cadastro realizado com sucesso!");

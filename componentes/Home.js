@@ -4,7 +4,7 @@ import { firestore } from "../firebase";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 
 export default function Home({ navigation }) {
-    const [animals, setAnimals] = useState([]);
+    const [animal, setAnimal] = useState([]);
 
     async function deleteAnimal(id) {
         try {
@@ -22,7 +22,7 @@ export default function Home({ navigation }) {
             querySnapshot.forEach((doc) => {
                 lista.push({ ...doc.data(), id: doc.id });
             });
-            setAnimals(lista);
+            setAnimal(lista);
         });
 
         return () => unsubscribe();
@@ -35,7 +35,7 @@ export default function Home({ navigation }) {
                     <Text style={estilo.title}>Lista de Animais</Text>
                 </View>
                 <FlatList
-                    data={animals}
+                    data={animal}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
                         <View style={estilo.itemContainer}>
@@ -43,12 +43,12 @@ export default function Home({ navigation }) {
                                 style={estilo.item}
                                 onPress={() => navigation.navigate("Alterar", {
                                     id: item.id,
-                                    nomeAnimal: item.nomeAnimal,
-                                    habitatAnimal: item.habitatAnimal,
+                                    Animal: item.Animal,
+                                    habitat: item.Habitat,
                                 })}
                             >
-                                <Text>Animal: {item.nomeAnimal}</Text>
-                                <Text>Habitat: {item.habitatAnimal}</Text>
+                                <Text>Animal: {item.Animal}</Text>
+                                <Text>Habitat: {item.Habitat}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => deleteAnimal(item.id)} style={estilo.deleteButton}>
                                 <Text style={estilo.deleteButtonText}>Deletar</Text>
