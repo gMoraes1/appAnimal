@@ -5,6 +5,7 @@ import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 
 export default function Home({ navigation }) {
     const [animal, setAnimal] = useState([]);
+    
 
     async function deleteAnimal(id) {
         try {
@@ -44,7 +45,7 @@ export default function Home({ navigation }) {
                                 onPress={() => navigation.navigate("Alterar", {
                                     id: item.id,
                                     Animal: item.Animal,
-                                    habitat: item.Habitat,
+                                    Habitat: item.Habitat
                                 })}
                             >
                                 <Text>Animal: {item.Animal}</Text>
